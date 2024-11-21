@@ -12,6 +12,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout
 from student.forms import StudentForm
+from subject.forms import SubjectForm
 
 def is_ADMINISTRATION(self):
     if str(self.user_type) == 'ADMINISTRATION':
@@ -62,7 +63,9 @@ def login_page(request):
 
 @login_required(login_url = '/login/')
 def base(request):
-    return render(request, "base.html")
+    show_button = request.path != '/base'
+    context = {'show_button': show_button}
+    return render(request, "base.html",context)
 
 def custom_logout(request):
     logout(request)
@@ -102,7 +105,6 @@ def student_edit(request, id):
             edit_form.save()
             return redirect('/student/')  
     add_form = StudentForm()
-
     context = {
                'edit_form': edit_form,
                'form':add_form,
@@ -127,7 +129,7 @@ def teacher_view(request):
 
 def teacher_edit(request, id):
     instance = Teacher.objects.get(id = id, is_deleted=False)
-    edit_form = TeacherForm(request.POST or None, instance=instance)
+    edit_form = TeacherForm(instance=instance)
     if request.method == 'POST':
         edit_form = TeacherForm(request.POST, request.FILES, instance= instance)
         if edit_form.is_valid():
@@ -148,7 +150,45 @@ def teacher_delete(request, id):
     return redirect('/teacher/')
 
 def student_base(request):
+
     return render(request,'studentbase.html')
+
+@login_required(login_url='/login/')
+def subject_view(request):   
+    subjects = Subject.objects.filter(is_deleted = False)
+    form = SubjectForm()
+    if request.method == 'POST':
+        form = SubjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/subject/')
+        else:
+            print(form.errors)
+    context = {'form': form,
+               'subjects':subjects}
+    return render(request,'subject.html',context)
+@login_required(login_url='/login/')
+def subject_edit(request, id):
+    instance = Subject.objects.get(id = id, is_deleted=False)
+    edit_form = SubjectForm(instance=instance)
+    if request.method == 'POST':
+        edit_form = SubjectForm(request.POST, instance= instance)
+        if edit_form.is_valid():
+            edit_form.save()
+            return redirect('/subject/')  
+    add_form = SubjectForm()
+    context = {
+               'edit_form': edit_form,
+               'form':add_form,
+               'edit_instance':instance}
+    return render(request, 'subject.html',context)
+
+@login_required(login_url='/login/')
+def subject_delete(request, id):  
+    subject = Subject.objects.get(id=id, is_deleted = False)  
+    subject.is_deleted = True
+    subject.save()
+    return redirect('/subject/')
 
 
 

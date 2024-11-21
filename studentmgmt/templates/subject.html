@@ -1,0 +1,46 @@
+{% extends 'base.html' %} 
+{%block subject%}
+<h1>Subject</h1>
+{%if edit_form%}
+<h1>Update</h1>
+
+<div>
+    <form method="POST" action="{% url 'subject_edit' edit_instance.id %}">
+      {% csrf_token %}
+      {{ edit_form.as_p}}
+      <button type="submit">Submit</button>
+    </form>
+    </div>
+{%else%}
+<table>
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Subject Name</th>
+            <th>Teacher</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for subject in subjects %}
+        <tr>
+            <td>{{subject.sub_code}}</td>
+            <td>{{subject.sub_name}}</td>
+            <td>{{subject.teacher_name}}</td>
+            <td><a href ="/subject/edit/{{subject.id}}"> Edit </a></td>
+            <td><a href ="/subject/delete/{{subject.id}}"> Delete </a></td> 
+        </tr>  
+        {%endfor%}  
+    </tbody>
+    </table>
+        <h1>ADD NEW</h1>
+ 
+    <form method="POST" action="{% url 'subject_view' %}">
+      {% csrf_token %}
+      {{ form.as_p}}
+      <button type="submit">Submit</button>
+    </form>
+{%endif%}
+       
+
+
+{%endblock%}

@@ -33,6 +33,11 @@ urlpatterns = [
     path('teacher/',views.teacher_view, name='teacher_view'),
     path('teacher_edit/<int:id>/', views.teacher_edit, name='teacher_edit'),
     path('teacher/delete/<int:id>/', views.teacher_delete, name='teacher_delete'),
+    path('subject/', views.subject_view, name= 'subject_view'),
+    path('subject/edit/<int:id>/', views.subject_edit, name ='subject_edit'),
+    path('subject/delete/<int:id>/', views.subject_delete, name ='subject_delete'),
+
+
     path('studentbase/', views.student_base, name = 'studentbase')
 ]
 if settings.DEBUG:

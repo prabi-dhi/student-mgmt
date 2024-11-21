@@ -7,21 +7,27 @@
   </head>
 
   <body>
+    <nav>
     <h1>Welcome "{{user.username}}"</h1>
     <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
+    <a href="{% url 'register_page' %}"><button>Register New User</button></a></div></br></br>   
+    </nav> 
 
-        <a href="{% url 'register_page' %}"><button>Register New User</button></a></div></br></br>   
-
-     {%block teacher%}
+    {%block teacher%}{%if show_button%}
      <a href="/teacher">
       <button>Check teachers</button></a></div></br></br>
-    </a>{%endblock%}
-    {%block student%}
-    <a href="/student">
-     <button>Check students</button></a></div></br>
-   </a>{%endblock%}
-  
+    </a>{%endif%}{%endblock%}
 
+    {%block student%} {%if show_button%}
+    <a href="/student">
+     <button>Check students</button></a></div></br></br>
+   </a>{%endif%}{%endblock%}
+
+    {%block subject%}{%if show_button%}
+   <a href="/subject ">
+    <button>Check subjects</button></a></div></br>
+  </a>{%endif%}{%endblock%}
+  
   </body>
 
 </html>
