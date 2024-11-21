@@ -22,10 +22,4 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
     
-    # def save(self, commit=True):
-    #     user = super(UserForm,self).save(commit=False)  
-    #     user.set_password(self.cleaned_data['password'])       
-        
-    #     user.save()         
-    #     return user
 
