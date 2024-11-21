@@ -10,6 +10,9 @@ class Teacher(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, null =True, blank = True)
     image = models.ImageField(upload_to='images/teachers',blank = True)
 
+    class Meta:
+        db_table = 'TEACHER'
+        
     def __str__(self):
         return self.name
     

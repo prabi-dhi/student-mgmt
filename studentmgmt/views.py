@@ -1,18 +1,21 @@
 from django.shortcuts import render, redirect
-from teacher.forms import TeacherForm
+
 from django.http import HttpResponse
 from teacher.models import Teacher
 from student.models import Student
 from subject.models import Subject
-from user.forms import UserForm
+from classroom.models import Classroom
 from user.models import User
+from user.forms import UserForm
+from teacher.forms import TeacherForm
+from student.forms import StudentForm
+from subject.forms import SubjectForm
+from classroom.forms import ClassroomForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout
-from student.forms import StudentForm
-from subject.forms import SubjectForm
 
 def is_ADMINISTRATION(self):
     if str(self.user_type) == 'ADMINISTRATION':
@@ -61,7 +64,7 @@ def login_page(request):
     context = {'form': form}
     return render(request, 'login.html', context)
 
-@login_required(login_url = '/login/')
+@admin_login_required
 def base(request):
     show_button = request.path != '/base'
     context = {'show_button': show_button}
@@ -74,7 +77,7 @@ def custom_logout(request):
 def student_view(request):
     return render(request, 'student.html')
 
-@login_required(login_url='/login/')
+@admin_login_required
 def student_view(request):
     students = Student.objects.filter(is_deleted = False)
     form = StudentForm() 
@@ -89,13 +92,13 @@ def student_view(request):
             return redirect('/student/')
     return render(request, "student.html",context)
 
-@login_required(login_url='/login/')
+@admin_login_required
 def student_delete(request, id):  
     student = Student.objects.get(id=id, is_deleted = False)  
     student.is_deleted = True
     student.save()
     return redirect('/student/')
-@login_required(login_url='/login/')
+@admin_login_required
 def student_edit(request, id):
     instance = Student.objects.get(id = id, is_deleted=False)
     edit_form = StudentForm(request.POST or None, instance=instance)
@@ -111,7 +114,7 @@ def student_edit(request, id):
                'edit_instance':instance}
     return render(request, 'student.html',context)
 
-@login_required(login_url='/login/')
+@admin_login_required
 def teacher_view(request):   
     teachers = Teacher.objects.filter(is_deleted = False)
     form = TeacherForm()
@@ -121,8 +124,8 @@ def teacher_view(request):
             form.save()
             return redirect('/teacher/')
         else:
-            print(form.errors)
-            # form = TeacherForm()
+            # print(form.errors)
+            form = TeacherForm()
     context = {'form': form,
                'teachers':teachers}
     return render(request,'teacher.html',context)
@@ -189,6 +192,23 @@ def subject_delete(request, id):
     subject.is_deleted = True
     subject.save()
     return redirect('/subject/')
+
+@login_required(login_url='/login/')
+def classroom_view(request):   
+    # classrooms = Classroom.objects.filter(is_deleted = False)
+    # form = ClassroomForm()
+    # if request.method == 'POST':
+    #     form = ClassroomForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect('/classroom/')
+    #     else:
+    #         print(form.errors)
+    # context= {'form': form,
+    #           'classrooms': classrooms}
+    return render(request, 'classroom.html')
+
+
 
 
 
