@@ -8,12 +8,20 @@
 
   <body>
     <h1>Welcome "{{user.username}}"</h1>
-    <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br>
-    {% block student %}
+    <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
+
+        <a href="{% url 'register_page' %}"><button>Register New User</button></a></div></br></br>   
+
+     {%block teacher%}
+     <a href="/teacher">
+      <button>Check teachers</button></a></div></br></br>
+    </a>{%endblock%}
+    {%block student%}
     <a href="/student">
-        <button>See Students</button></br></br>
-      </a>
-     {% endblock %}
+     <button>Check students</button></a></div></br>
+   </a>{%endblock%}
+  
+
   </body>
 
 </html>

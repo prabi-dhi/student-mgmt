@@ -8,7 +8,7 @@ class Student(models.Model):
     class_enrolled = models.ForeignKey(Classroom, on_delete=models.CASCADE, null= True, blank = True)
     is_deleted = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete = models.CASCADE, null= True, blank =True)
-    image = models.ImageField(upload_to='images/',null=True, blank = True)
+    image = models.ImageField(upload_to='images/students',null=True, blank = True)
 
     def __str__(self):
         return self.s_name

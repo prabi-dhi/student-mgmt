@@ -23,13 +23,17 @@ from django.conf.urls.static import static
 from .import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('teacher/',views.teacher_view, name='teacher_view'),
     path('register/', views.register_page, name= 'register_page'),
     path('login/', views.login_page, name = 'login_page'),
     path('', views.base, name = 'base'),
     path('logout/', views.custom_logout, name= 'logout'),
     path('student/', views.student_view, name='student_view'), 
-
+    path('student_edit/<int:id>/', views.student_edit, name='student_edit'),
+    path('student/delete/<int:id>/', views.student_delete, name='student_delete'),
+    path('teacher/',views.teacher_view, name='teacher_view'),
+    path('teacher_edit/<int:id>/', views.teacher_edit, name='teacher_edit'),
+    path('teacher/delete/<int:id>/', views.teacher_delete, name='teacher_delete'),
+    path('studentbase/', views.student_base, name = 'studentbase')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

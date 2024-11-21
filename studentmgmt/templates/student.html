@@ -21,23 +21,23 @@
         {% else %}
             <p>No img</p>
         {% endif %}</td>
-           <td><a href ="/student_edit/{{student.s_id}}"> Edit </a></td>
-           <td><a href ="/student/delete/{{student.s_id}}"> Delete </a></td>
+           <td><a href ="/student_edit/{{student.id}}"> Edit </a></td>
+           <td><a href ="/student/delete/{{student.id}}"> Delete </a></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-{% comment %} {%if edit_form%}
+{%if edit_form%}
 <h1>Edit</h1>
 <div>
-  <form method="POST" action="{% url 'student_edit' edit_instance.s_id %}">
+  <form method="POST" action="{% url 'student_edit' edit_instance.id %}"enctype ="multipart/form-data">
     {% csrf_token %}
     {{ edit_form.as_p}}
     <button type="submit">Submit</button>
   </form>
   </div>
-{%else%} {% endcomment %}
-<h4>ADD/ Update </h4>
+{%else%} 
+<h4>ADD </h4>
 <div>
 <form method="POST" action="{% url 'student_view' %}" enctype ="multipart/form-data">
   {% csrf_token %}
@@ -45,5 +45,5 @@
   <button type="submit">Submit</button>
 </form>
 </div>
-{% comment %} {%endif%} {% endcomment %}
+{%endif%}
 {% endblock %}
