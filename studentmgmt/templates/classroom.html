@@ -1,4 +1,41 @@
 {%extends 'base.html'%}
 {% block student%}
 <h1> Classroom </h1>
+{%if edit_form %}
+<div>
+    <form method="POST" action="{% url 'classroom_edit' edit_instance.id %}">
+      {% csrf_token %}
+      {{ edit_form.as_p}}
+      <button type="submit">Submit</button>
+    </form>
+</div>
+{%else%}
+<table>
+    <thead>
+        <tr>
+            <th> Room Number</th>
+            <th>Total Student</th>
+            <th> Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for classroom in classrooms%}
+        <tr> 
+            <td>{{classroom.room_number}}</td>
+            <td>{{classroom.total_student}}</td>
+            <td><a href="/classroom/edit/{{classroom.id}}">Edit</a></td>
+            <td><a href = "/classroom/delete/{{classroom.id}}">Delete</a></td>
+        </tr>
+        {%endfor%}
+    </tbody>
+</table>
+
+<h1>ADD NEW</h1>
+    <form method="POST" action="{% url 'classroom_view' %}">
+      {% csrf_token %}
+      {{ form.as_p}}
+      <button type="submit">Submit</button>
+    </form>
+
+{%endif%}
 {%endblock%}

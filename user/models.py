@@ -10,11 +10,10 @@ class User(AbstractUser):
     user_type = models.CharField(max_length=20, choices=Types.choices, default=Types.STUDENT)
     # password = models.CharField(max_length=100)
     email = models.EmailField(unique=True, max_length=50)
-    image = models.ImageField(upload_to='images/',blank = True, null=True)
+    # image = models.ImageField(upload_to='images/',blank = True, null=True)
     username = models.CharField(unique=True, max_length=40)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ["username"]
-    
+    REQUIRED_FIELDS = ["username"]  
 
     class Meta:
         db_table = "USER"

@@ -4,11 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Management</title>
+    <style>
+      table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px;
+      text-align: left;
+    }
+    </style>
   </head>
 
   <body>
+    <nav>
     <h1>Welcome "{{user.username}}"</h1>
     <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
+    </nav>
+    {%if students%}
+    {%for student in students%}
+
+    {% if student.image %}
+
+      <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50"></br>
+      <p>{{student.s_name}}</p>
+  {% else %}
+      <p>No img</p>
+  {% endif %}
+
+    <table>
+      <tr>
+        <th>Student Name</th>
+        <td>{{student.s_name}}</td>
+      </tr>
+      <tr>
+      <th>Your Grade</th>
+      <td>{{student.grade}}</td></tr> 
+      <tr><th> Enrolled Class</th>
+        <td>{{student.class_enrolled}}</td></tr>
+    </table>{%endfor%}
+{% else %}
+  <p>You don't have any data available.</p>
+{% endif %}
 
   </body>
 

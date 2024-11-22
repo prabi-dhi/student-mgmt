@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-
 from django.http import HttpResponse
 from teacher.models import Teacher
 from student.models import Student
@@ -17,18 +16,14 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout
 
-def is_ADMINISTRATION(self):
-    if str(self.user_type) == 'ADMINISTRATION':
-        return True
-    else:
-        return False
-ad_login_required = user_passes_test(lambda u: u.user_type == 'ADMINISTRATION', login_url ='/login/')
+def is_admin(user):
+    return user.user_type == 'ADMINISTRATION'
+def is_student(user):
+    return user.user_type == 'STUDENT'
+def is_teacher(user):
+    return user.user_type == 'TEACHER'
 
-def admin_login_required(view_func):
-    decorated_view_func = login_required(ad_login_required(view_func), login_url='/')
-    return decorated_view_func
-
-@admin_login_required
+@user_passes_test(is_admin, login_url='/')
 def register_page(request):
     form = UserForm()
     if request.method == 'POST':
@@ -39,7 +34,7 @@ def register_page(request):
                 Teacher.objects.create(user = user , name = user)
             elif user.user_type == 'STUDENT':
                 Student.objects.create(user = user, s_name = user)
-            return redirect('/')
+            return redirect('/base/')
         else:
             form = UserForm()      
     context={'form':form}
@@ -56,15 +51,17 @@ def login_page(request):
             if user:
                 login(request, user)
                 if user.user_type == 'ADMINISTRATION':
-                    return redirect('/') 
-                else:
+                    return redirect('/base/') 
+                elif user.user_type == 'STUDENT':
                     return redirect('/studentbase/')
+                else:
+                    return redirect('/teacherbase/')
     else:
         form = AuthenticationForm()
     context = {'form': form}
     return render(request, 'login.html', context)
 
-@admin_login_required
+@user_passes_test(is_admin, login_url='/')
 def base(request):
     show_button = request.path != '/base'
     context = {'show_button': show_button}
@@ -72,12 +69,12 @@ def base(request):
 
 def custom_logout(request):
     logout(request)
-    return redirect('/login/')
+    return redirect('/')
 
 def student_view(request):
     return render(request, 'student.html')
 
-@admin_login_required
+@user_passes_test(is_admin, login_url='/')
 def student_view(request):
     students = Student.objects.filter(is_deleted = False)
     form = StudentForm() 
@@ -92,13 +89,13 @@ def student_view(request):
             return redirect('/student/')
     return render(request, "student.html",context)
 
-@admin_login_required
+@user_passes_test(is_admin, login_url='/')
 def student_delete(request, id):  
     student = Student.objects.get(id=id, is_deleted = False)  
     student.is_deleted = True
     student.save()
     return redirect('/student/')
-@admin_login_required
+@user_passes_test(is_admin, login_url='/')
 def student_edit(request, id):
     instance = Student.objects.get(id = id, is_deleted=False)
     edit_form = StudentForm(request.POST or None, instance=instance)
@@ -107,14 +104,14 @@ def student_edit(request, id):
         if edit_form.is_valid():
             edit_form.save()
             return redirect('/student/')  
-    add_form = StudentForm()
+    # add_form = StudentForm()
     context = {
                'edit_form': edit_form,
-               'form':add_form,
+            #    'form':add_form,
                'edit_instance':instance}
     return render(request, 'student.html',context)
 
-@admin_login_required
+@user_passes_test(is_admin, login_url='/')
 def teacher_view(request):   
     teachers = Teacher.objects.filter(is_deleted = False)
     form = TeacherForm()
@@ -124,12 +121,12 @@ def teacher_view(request):
             form.save()
             return redirect('/teacher/')
         else:
-            # print(form.errors)
-            form = TeacherForm()
+            print(form.errors)
+            # form = TeacherForm()
     context = {'form': form,
                'teachers':teachers}
     return render(request,'teacher.html',context)
-
+@user_passes_test(is_admin, login_url='/')
 def teacher_edit(request, id):
     instance = Teacher.objects.get(id = id, is_deleted=False)
     edit_form = TeacherForm(instance=instance)
@@ -138,25 +135,18 @@ def teacher_edit(request, id):
         if edit_form.is_valid():
             edit_form.save()
             return redirect('/teacher/')  
-    add_form = TeacherForm()
-
     context = {
                'edit_form': edit_form,
-               'form':add_form,
                'edit_instance':instance}
     return render(request, 'teacher.html',context)
-@login_required(login_url='/login/')
+@user_passes_test(is_admin, login_url='/')
 def teacher_delete(request, id):  
     teacher = Teacher.objects.get(id=id, is_deleted = False)  
     teacher.is_deleted = True
     teacher.save()
     return redirect('/teacher/')
 
-def student_base(request):
-
-    return render(request,'studentbase.html')
-
-@login_required(login_url='/login/')
+@user_passes_test(is_admin, login_url='/')
 def subject_view(request):   
     subjects = Subject.objects.filter(is_deleted = False)
     form = SubjectForm()
@@ -170,7 +160,7 @@ def subject_view(request):
     context = {'form': form,
                'subjects':subjects}
     return render(request,'subject.html',context)
-@login_required(login_url='/login/')
+@user_passes_test(is_admin, login_url='/')
 def subject_edit(request, id):
     instance = Subject.objects.get(id = id, is_deleted=False)
     edit_form = SubjectForm(instance=instance)
@@ -179,39 +169,80 @@ def subject_edit(request, id):
         if edit_form.is_valid():
             edit_form.save()
             return redirect('/subject/')  
-    add_form = SubjectForm()
+    # add_form = SubjectForm()
     context = {
                'edit_form': edit_form,
-               'form':add_form,
+            #    'form':add_form,
                'edit_instance':instance}
     return render(request, 'subject.html',context)
 
-@login_required(login_url='/login/')
+@user_passes_test(is_admin, login_url='/')
 def subject_delete(request, id):  
     subject = Subject.objects.get(id=id, is_deleted = False)  
     subject.is_deleted = True
     subject.save()
     return redirect('/subject/')
 
-@login_required(login_url='/login/')
+@user_passes_test(is_admin, login_url='/')
 def classroom_view(request):   
-    # classrooms = Classroom.objects.filter(is_deleted = False)
-    # form = ClassroomForm()
-    # if request.method == 'POST':
-    #     form = ClassroomForm(request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         return redirect('/classroom/')
-    #     else:
-    #         print(form.errors)
-    # context= {'form': form,
-    #           'classrooms': classrooms}
-    return render(request, 'classroom.html')
+    classrooms = Classroom.objects.filter(is_deleted = False)
+    form = ClassroomForm()
+    if request.method == 'POST':
+        form = ClassroomForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/classroom/')
+        else:
+            print(form.errors)
+    context= {'form': form,
+              'classrooms': classrooms}
+    return render(request, 'classroom.html',context)
 
+@user_passes_test(is_admin, login_url='/')
+def classroom_edit(request, id):   
+    instance = Classroom.objects.get(id = id, is_deleted=False)
+    edit_form = ClassroomForm(instance=instance)
+    if request.method == 'POST':
+        edit_form = ClassroomForm(request.POST, instance= instance)
+        if edit_form.is_valid():
+            edit_form.save()
+            return redirect('/classroom/')  
+    context = {
+               'edit_form': edit_form,
+               'edit_instance':instance}
+    return render(request, 'classroom.html',context)
+@user_passes_test(is_admin, login_url='/')
+def classroom_delete(request, id):  
+    classroom = Classroom.objects.get(id=id, is_deleted = False)  
+    classroom.is_deleted = True
+    classroom.save()
+    return redirect('/classroom/')
 
+@user_passes_test(is_student, login_url='/')
+def student_base(request):
+    user = request.user
+    students= Student.objects.filter(user = user)
+    return render(request,'studentbase.html',{'students':students})
 
+@user_passes_test(is_teacher, login_url ='/')
+def teacher_base(request):
+    user = request.user
+    teachers = Teacher.objects.filter(user=user)
+    students = Student.objects.filter(is_deleted = False)
+    context={'students':students,
+             'teachers':teachers,
+    }
+    return render(request, 'teacherbase.html', context)
 
-
-
-    
-
+# def teacher_base_edit(request, id):
+#     instance = Student.objects.get(id = id, is_deleted = False)
+#     form = StudentForm(instance=instance)
+#     if request.method == 'POST':
+#         form= StudentForm(request.POST, instance=instance)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('/teacherbase/')
+#     context={
+#              'form': form
+#     }
+#     return render(request, 'teacherbase.html', context)

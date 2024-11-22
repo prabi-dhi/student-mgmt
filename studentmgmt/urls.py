@@ -22,10 +22,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .import views
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),  
+    path('', views.login_page, name = 'login_page'),
+    path('base/', views.base, name = 'base'),
     path('register/', views.register_page, name= 'register_page'),
-    path('login/', views.login_page, name = 'login_page'),
-    path('', views.base, name = 'base'),
     path('logout/', views.custom_logout, name= 'logout'),
     path('student/', views.student_view, name='student_view'), 
     path('student_edit/<int:id>/', views.student_edit, name='student_edit'),
@@ -37,8 +37,11 @@ urlpatterns = [
     path('subject/edit/<int:id>/', views.subject_edit, name ='subject_edit'),
     path('subject/delete/<int:id>/', views.subject_delete, name ='subject_delete'),
     path('classroom/', views.classroom_view, name = 'classroom_view'),
-
-    path('studentbase/', views.student_base, name = 'studentbase')
+    path('classroom/edit/<int:id>/', views.classroom_edit, name='classroom_edit'),
+    path('classroom/delete/<int:id>/', views.classroom_delete, name = 'classroom_delete'),
+    path('studentbase/', views.student_base, name = 'student_base'),
+    path('teacherbase/', views.teacher_base, name= 'teacher_base'),
+    # path('teacherbase/edit/<int:id>/', views.teacher_base_edit, name= 'teacher_base_edit')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
