@@ -59,15 +59,18 @@
                   {% else %}
                     <p>No img</p>
                   {% endif %}</td>
-                {% comment %} <td><form method="POST" action="{%url 'teacher_base_edit' teacher.id%}">
-                  {{form.grade}}
-                </form></td> {% endcomment %}
+                  <td><a href ="{% url 'teacher_base_edit' student.id %}"> Edit </a></td>
               </tr>
             {%endfor%}
           </tbody>
         </table>
       </div>
-
-
+   {%if form%}   
+  <form method="POST" action="{% url 'teacher_base_edit' instance.id %}">
+    {%csrf_token%}
+        {{form}}
+        <button type = "submit">Update</button>
+      </form> 
+{%endif%}
   </body>
   </html>

@@ -41,7 +41,7 @@ urlpatterns = [
     path('classroom/delete/<int:id>/', views.classroom_delete, name = 'classroom_delete'),
     path('studentbase/', views.student_base, name = 'student_base'),
     path('teacherbase/', views.teacher_base, name= 'teacher_base'),
-    # path('teacherbase/edit/<int:id>/', views.teacher_base_edit, name= 'teacher_base_edit')
+    path('teacherbase/edit/<int:id>/', views.teacher_base_edit, name= 'teacher_base_edit')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

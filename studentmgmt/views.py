@@ -234,15 +234,17 @@ def teacher_base(request):
     }
     return render(request, 'teacherbase.html', context)
 
-# def teacher_base_edit(request, id):
-#     instance = Student.objects.get(id = id, is_deleted = False)
-#     form = StudentForm(instance=instance)
-#     if request.method == 'POST':
-#         form= StudentForm(request.POST, instance=instance)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('/teacherbase/')
-#     context={
-#              'form': form
-#     }
-#     return render(request, 'teacherbase.html', context)
+@user_passes_test(is_teacher, login_url ='/')
+def teacher_base_edit(request, id):
+    instance = Student.objects.get(id = id, is_deleted = False)
+    form = StudentForm(instance=instance)
+    if request.method == 'POST':
+        form= StudentForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return redirect('/teacherbase/')
+    context={
+             'form': form,
+             'instance': instance
+    }
+    return render(request, 'teacherbase.html', context)
