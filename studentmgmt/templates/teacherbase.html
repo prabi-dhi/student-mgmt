@@ -66,7 +66,7 @@
         </table>
       </div>
    {%if form%}   
-  <form method="POST" action="{% url 'teacher_base_edit' instance.id %}">
+  <form method="POST" action="{% url 'teacher_base_edit' instance.id %}" enctype ="multipart/form-data">
     {%csrf_token%}
         {{form}}
         <button type = "submit">Update</button>

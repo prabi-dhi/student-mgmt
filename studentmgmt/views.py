@@ -13,8 +13,10 @@ from classroom.forms import ClassroomForm
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import logout
+# from django.contrib.auth import update_session_auth_hash
+# from django.contrib.auth.forms import PasswordChangeForm
 
 def is_admin(user):
     return user.user_type == 'ADMINISTRATION'
@@ -239,7 +241,7 @@ def teacher_base_edit(request, id):
     instance = Student.objects.get(id = id, is_deleted = False)
     form = StudentForm(instance=instance)
     if request.method == 'POST':
-        form= StudentForm(request.POST, instance=instance)
+        form= StudentForm(request.POST,request.FILES, instance=instance)
         if form.is_valid():
             form.save()
             return redirect('/teacherbase/')
@@ -248,3 +250,4 @@ def teacher_base_edit(request, id):
              'instance': instance
     }
     return render(request, 'teacherbase.html', context)
+

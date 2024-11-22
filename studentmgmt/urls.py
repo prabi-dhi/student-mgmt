@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import views
-
 from django.conf import settings
 from django.conf.urls.static import static
 from .import views
+
+# from django.conf.urls import url  # password
 urlpatterns = [
     path('admin/', admin.site.urls),  
     path('', views.login_page, name = 'login_page'),
@@ -41,7 +42,11 @@ urlpatterns = [
     path('classroom/delete/<int:id>/', views.classroom_delete, name = 'classroom_delete'),
     path('studentbase/', views.student_base, name = 'student_base'),
     path('teacherbase/', views.teacher_base, name= 'teacher_base'),
-    path('teacherbase/edit/<int:id>/', views.teacher_base_edit, name= 'teacher_base_edit')
+    path('teacherbase/edit/<int:id>/', views.teacher_base_edit, name= 'teacher_base_edit'),
+
+        
+    # path(r'^password/$', views.change_password, name='change_password'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
