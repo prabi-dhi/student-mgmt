@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th> Room Number</th>
-            <th>Total Student</th>
+            <th>Total Seat</th>
             <th> Actions</th>
         </tr>
     </thead>
@@ -22,7 +22,7 @@
         {% for classroom in classrooms%}
         <tr> 
             <td>{{classroom.room_number}}</td>
-            <td>{{classroom.total_student}}</td>
+            <td>{{classroom.total_seat}}</td>
             <td><a href="/classroom/edit/{{classroom.id}}">Edit</a></td>
             <td><a href = "/classroom/delete/{{classroom.id}}">Delete</a></td>
         </tr>

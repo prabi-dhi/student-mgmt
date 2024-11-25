@@ -1,5 +1,7 @@
 {% extends 'base.html' %} {% block teacher %}
-    <h1>Teacher</h1>
+    
+<section style="margin-top:160px;">
+<h1>Teacher</h1>
 
       {% if edit_form %}
       <h1>Edit Teacher</h1>
@@ -46,4 +48,5 @@
           </form>
           </div>
           {%endif%}
+        </section>
 {% endblock %}

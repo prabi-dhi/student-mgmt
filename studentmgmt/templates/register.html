@@ -10,8 +10,16 @@
     <title>Registration</title>
   </head>
   <body>
+    {% comment %} {% if messages %}
+    {% for message in messages %}
+    <div class=" {{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %} {% endcomment %}
     <div class ="conatiner login-box">
     <h1>Register Here</h1>
+
     <form method = 'POST' action="{% url 'register_page' %}">
         {% csrf_token %}
         {{form.as_p}}

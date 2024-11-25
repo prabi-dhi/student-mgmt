@@ -48,10 +48,42 @@
         <tr>
           <th> Enrolled Class</th>
           <td>{{student.class_enrolled}}</td></tr>
-        </table>{%endfor%}
+
+        </table></br>
+        {%if teachers%}
+
+
+        <table>
+          <thead>
+        <tr>
+          <th>Teachers in your class</th></tr>
+        </thead>
+          
+          <tbody>
+            {%for teacher in teachers%}
+            <tr><td>{{teacher.name}}</td>
+        </tr>{%endfor%}
+      </tbody>
+      </table>
+        
+        {%endif%} 
+        
+        {%endfor%}
       {% else %}
         <p>You don't have any data available.</p>
       {% endif %}
+
+        {% comment %} {%if teacher%}
+        {%for teacher in teachers%}
+        <table>
+        <tr>
+          <th>Teacher</th>
+          <td>{{teacher.name}}</td>
+        </tr>
+      </table>
+        {%endfor%}
+        {%endif%}  {% endcomment %}
+
     </div>
   </body>
 

@@ -57,15 +57,16 @@
         <th>Grade</th>
         <th>Enrolled Class</th>
        <th>Image</th>
-       <th>Update Grade</th>
+       <th>Update Student</th>
       </tr>
     </thead>
     <tbody>
+      
       {%for student in students%}
         <tr>
           <td>{{student.s_name}}</td> 
           <td>{{student.grade}}</td>
-          <td>{{student.class_enrolled}}</td>
+          <td>{{student.class_enrolled.room_number}}</td>
           <td> 
             {% if student.image %}
               <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50">

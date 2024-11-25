@@ -28,9 +28,12 @@ def is_teacher(user):
 @user_passes_test(is_admin, login_url='/')
 def register_page(request):
     form = UserForm()
-    if request.method == 'POST':
+    if request.method == 'POST':      
         form = UserForm(request.POST)
-        if form.is_valid():           
+        if form.is_valid():   
+            # if user.exists():
+            #     messages.error(request, "username exists")    
+            #     return redirect('/login/')    
             user = form.save()
             if user.user_type == 'TEACHER':
                 Teacher.objects.create(user = user , name = user)
@@ -38,6 +41,7 @@ def register_page(request):
                 Student.objects.create(user = user, s_name = user)
             return redirect('/base/')
         else:
+            # messages.error(request,"Account Creation Unsuccessful")
             form = UserForm()      
     context={'form':form}
     return render(request,'register.html', context)
@@ -233,15 +237,21 @@ def classroom_delete(request, id):
 def student_base(request):
     user = request.user
     students= Student.objects.filter(user = user)
-    return render(request,'studentbase.html',{'students':students})
+    teachers = Teacher.objects.filter(is_deleted = False, class_assigned__in = [student.class_enrolled for student in students])
+    context={
+        'students':students,
+        'teachers':teachers}
+    return render(request,'studentbase.html',context)
 
 @user_passes_test(is_teacher, login_url ='/')
 def teacher_base(request):
     user = request.user
-    teacher = Teacher.objects.filter(user=user)
-    students = Student.objects.filter(is_deleted = False)
+    teachers = Teacher.objects.filter(user=user)
+    # students = Student.objects.filter(is_deleted = False)
+    teacher_classes = [teacher.class_assigned for teacher in teachers]
+    students = Student.objects.filter(is_deleted = False,class_enrolled__in=teacher_classes)
     context={'students':students,
-             'teachers':teacher,
+             'teachers':teachers,
     }
     return render(request, 'teacherbase.html', context)
 
