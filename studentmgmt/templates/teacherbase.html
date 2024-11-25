@@ -1,8 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     <title>Student Management</title>
     <style>
       table, th, td {
@@ -36,41 +40,44 @@
       {%endif%}
     </div></br>
 
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Student name</th>
-              <th>Grade</th>
-              <th>Enrolled Class</th>
-             <th>Image</th>
-             <th>Update Grade</th>
-            </tr>
-          </thead>
-          <tbody>
-            {%for student in students%}
-              <tr>
-                <td>{{student.s_name}}</td> 
-                <td>{{student.grade}}</td>
-                <td>{{student.class_enrolled}}</td>
-                <td> 
-                  {% if student.image %}
-                    <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50">
-                  {% else %}
-                    <p>No img</p>
-                  {% endif %}</td>
-                  <td><a href ="{% url 'teacher_base_edit' student.id %}"> Edit </a></td>
-              </tr>
-            {%endfor%}
-          </tbody>
-        </table>
-      </div>
+    
    {%if form%}   
   <form method="POST" action="{% url 'teacher_base_edit' instance.id %}" enctype ="multipart/form-data">
     {%csrf_token%}
         {{form}}
         <button type = "submit">Update</button>
       </form> 
+{%else%}
+
+<div>
+  <table>
+    <thead>
+      <tr>
+        <th>Student name</th>
+        <th>Grade</th>
+        <th>Enrolled Class</th>
+       <th>Image</th>
+       <th>Update Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      {%for student in students%}
+        <tr>
+          <td>{{student.s_name}}</td> 
+          <td>{{student.grade}}</td>
+          <td>{{student.class_enrolled}}</td>
+          <td> 
+            {% if student.image %}
+              <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50">
+            {% else %}
+              <p>No img</p>
+            {% endif %}</td>
+            <td><a href ="{% url 'teacher_base_edit' student.id %}"> Edit </a></td>
+        </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+</div>
 {%endif%}
   </body>
   </html>

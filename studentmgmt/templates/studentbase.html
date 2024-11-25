@@ -1,9 +1,13 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Management</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     <style>
       table, th, td {
       border: 1px solid black;
@@ -18,35 +22,37 @@
 
   <body>
     <nav>
-    <h1>Welcome "{{user.username}}"</h1>
-    <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
+      <h1>Welcome "{{user.username}}"</h1>
+      <a href="{% url 'logout' %}"><button >Log Out</button></a></div></br></br>
     </nav>
-    {%if students%}
-    {%for student in students%}
-
-    {% if student.image %}
-
-      <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50"></br>
-      <p>{{student.s_name}}</p>
-  {% else %}
-      <p>No img</p>
-  {% endif %}
-
-    <table>
-      <tr>
-        <th>Student Name</th>
-        <td>{{student.s_name}}</td>
-      </tr>
-      <tr>
-      <th>Your Grade</th>
-      <td>{{student.grade}}</td></tr> 
-      <tr><th> Enrolled Class</th>
-        <td>{{student.class_enrolled}}</td></tr>
-    </table>{%endfor%}
-{% else %}
-  <p>You don't have any data available.</p>
-{% endif %}
-
+    <div>
+      {%if students%}
+      {%for student in students%}
+        <div class ="container">
+        {% if student.image %}
+          <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50"></br>
+          <p>{{student.s_name}}</p>
+        {% else %}
+          <p>No img</p>
+        {% endif %}
+        </div>
+        <table>
+        <tr>
+          <th>Student Name</th>
+          <td>{{student.s_name}}</td>
+        </tr>
+        <tr>
+          <th>Your Grade</th>
+          <td>{{student.grade}}</td>
+        </tr> 
+        <tr>
+          <th> Enrolled Class</th>
+          <td>{{student.class_enrolled}}</td></tr>
+        </table>{%endfor%}
+      {% else %}
+        <p>You don't have any data available.</p>
+      {% endif %}
+    </div>
   </body>
 
 </html>

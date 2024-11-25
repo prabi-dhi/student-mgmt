@@ -87,7 +87,12 @@ def student_view(request):
     if request.method == 'POST':
         form = StudentForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            student = form.save(commit=False) 
+            user= User.objects.create(student=student, username = student.s_name, email=student.s_name.lower() + '@gmail.com')
+            user.set_password(student.s_name)
+            user.save()
+            student.user = user
+            student.save()
             return redirect('/student/')
     return render(request, "student.html",context)
 
@@ -120,11 +125,15 @@ def teacher_view(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            teacher= form.save(commit=False)
+            user= User.objects.create(teacher=teacher, username = teacher.name, user_type = "TEACHER", email=teacher.name.lower() + '@gmail.com')
+            user.set_password(teacher.name)
+            user.save()
+            teacher.user = user
+            teacher.save()
             return redirect('/teacher/')
         else:
             print(form.errors)
-            # form = TeacherForm()
     context = {'form': form,
                'teachers':teachers}
     return render(request,'teacher.html',context)
@@ -229,10 +238,10 @@ def student_base(request):
 @user_passes_test(is_teacher, login_url ='/')
 def teacher_base(request):
     user = request.user
-    teachers = Teacher.objects.filter(user=user)
+    teacher = Teacher.objects.filter(user=user)
     students = Student.objects.filter(is_deleted = False)
     context={'students':students,
-             'teachers':teachers,
+             'teachers':teacher,
     }
     return render(request, 'teacherbase.html', context)
 

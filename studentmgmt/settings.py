@@ -133,15 +133,11 @@ AUTH_USER_MODEL = "user.User"
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-# AUTHENTICATION_BACKENDS = [
-#     'django.contrib.auth.backends.ModelBackend',
-# ]
+STATIC_URL = '/static/css/'
 
-# PASSWORD_HASHERS = [
-#     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-#     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-#     'django.contrib.auth.hashers.Argon2PasswordHasher',
-#     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-# ]
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
+# STATIC_ROOT = BASE_DIR / "staticfiles" 
 

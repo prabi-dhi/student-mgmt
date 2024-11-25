@@ -36,8 +36,9 @@
   </form>
   </div>
 {%else%} 
-<h4>ADD </h4>
 <div>
+<h4>ADD </h4>
+
 <form method="POST" action="{% url 'student_view' %}" enctype ="multipart/form-data">
   {% csrf_token %}
   {{ form.as_p}}

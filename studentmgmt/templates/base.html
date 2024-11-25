@@ -1,37 +1,42 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Student Management</title>
   </head>
 
   <body>
     <nav>
     <h1>Welcome "{{user.username}}"</h1>
-    <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
-    <a href="{% url 'register_page' %}"><button>Register New User</button></a></div></br></br>   
+    <a href="{% url 'logout' %}"><button>Log Out</button></a>
+    <a href="{% url 'register_page' %}"><button>Register New User</button></a>
     </nav> 
-
+    <div >
+     <div>
     {%block teacher%}{%if show_button%}
      <a href="/teacher">
-      <button>Check teachers</button></a></div></br></br>
+      <button>Check teachers</button></a></div>
     </a>{%endif%}{%endblock%}
-
+  </div><div>
     {%block student%} {%if show_button%}
     <a href="/student">
-     <button>Check students</button></a></div></br></br>
-   </a>{%endif%}{%endblock%}
-
+     <button>Check students</button></a></div>
+   </a>{%endif%}{%endblock%}</div>
+<div>
     {%block subject%}{%if show_button%}
    <a href="/subject ">
-    <button>Check subjects</button></a></div></br></br>
+    <button>Check subjects</button></a></div>
   </a>{%endif%}{%endblock%}
-  
+</div><div>
   {%block classroom%}{%if show_button%}
   <a href="/classroom ">
-   <button>Check classrooms</button></a></div></br>
+   <button>Check classrooms</button></a></div>
  </a>{%endif%}{%endblock%}
+</div>
+</div>  
   </body>
 
 </html>
