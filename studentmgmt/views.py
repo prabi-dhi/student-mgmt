@@ -238,16 +238,42 @@ def student_base(request):
     user = request.user
     students= Student.objects.filter(user = user)
     teachers = Teacher.objects.filter(is_deleted = False, class_assigned__in = [student.class_enrolled for student in students])
+
     context={
         'students':students,
         'teachers':teachers}
     return render(request,'studentbase.html',context)
 
+ ####   for email
+def student_base_edit(request,id):
+    user= request.user
+    # if user.id != id:
+    #     messages.error(request, "You do not have permission to edit this user's email.")
+    #     return redirect('/studentbase/')
+
+    if request.method=='POST':
+        new_email = request.POST.get('email')         
+        if new_email == user.email:
+            messages.error(request, "The email is already the same.")
+            return redirect('/studentbase/')
+        if User.objects.filter(email=new_email).exists():
+            messages.error(request, "Email is already taken.")
+            return redirect('/studentbase/')            
+        try:
+            user.email = new_email
+            user.save()
+            messages.success(request, "Email updated successfully.")
+            return redirect('/studentbase/')
+        except Exception as e:
+            messages.error(request, "cant change email")
+            return redirect('/studentbase/')
+    
+    return render(request,'studentbase.html')
+
 @user_passes_test(is_teacher, login_url ='/')
 def teacher_base(request):
     user = request.user
     teachers = Teacher.objects.filter(user=user)
-    # students = Student.objects.filter(is_deleted = False)
     teacher_classes = [teacher.class_assigned for teacher in teachers]
     students = Student.objects.filter(is_deleted = False,class_enrolled__in=teacher_classes)
     context={'students':students,

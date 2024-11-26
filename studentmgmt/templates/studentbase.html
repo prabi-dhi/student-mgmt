@@ -25,6 +25,7 @@
       <h1>Welcome "{{user.username}}"</h1>
       <a href="{% url 'logout' %}"><button >Log Out</button></a></div></br></br>
     </nav>
+
     <div>
       {%if students%}
       {%for student in students%}
@@ -48,43 +49,46 @@
         <tr>
           <th> Enrolled Class</th>
           <td>{{student.class_enrolled}}</td></tr>
-
-        </table></br>
-        {%if teachers%}
-
-
-        <table>
-          <thead>
         <tr>
-          <th>Teachers in your class</th></tr>
-        </thead>
-          
+          <th>Email</th>
+          <td>{{user.email}}</td>
+        </tr>
+        </table></br>
+
+        {%if teachers%}
+          <table>
+          <thead>
+          <tr><th>Teachers in your class</th></tr>
+          </thead>         
           <tbody>
             {%for teacher in teachers%}
-            <tr><td>{{teacher.name}}</td>
-        </tr>{%endfor%}
-      </tbody>
-      </table>
-        
+              <tr><td>{{teacher.name}}</td></tr>
+            {%endfor%}
+          </tbody>
+          </table>        
         {%endif%} 
         
-        {%endfor%}
+      {%endfor%}
       {% else %}
-        <p>You don't have any data available.</p>
+        <p>You don't have any data available.</p> 
       {% endif %}
-
-        {% comment %} {%if teacher%}
-        {%for teacher in teachers%}
-        <table>
-        <tr>
-          <th>Teacher</th>
-          <td>{{teacher.name}}</td>
-        </tr>
-      </table>
-        {%endfor%}
-        {%endif%}  {% endcomment %}
-
     </div>
-  </body>
 
+
+    <div style="border-radius:5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-left:90px; padding:50px;text-align: center;">
+    {% comment %} <div class="update-box"> {% endcomment %}
+      {%if messages%}
+        {%for message in messages%}
+          <div>{{message}}</div></br>
+        {%endfor%}
+      {%endif%}
+      <form action="{% url 'student_base_edit' user.id %}" method = 'POST'>
+        {%csrf_token%}
+        <p>Update Email</p>
+        <input type="text" name="email" placeholder="Email" required>
+        <button>Save</button>
+      </form>
+    </div>
+
+  </body>
 </html>

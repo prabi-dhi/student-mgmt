@@ -83,9 +83,14 @@ form button {
     cursor: pointer;
 }
 
-/* .button {
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+table,
+th,
+td {
+    border: 1px solid;
+}
+/* .update-box {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 } */

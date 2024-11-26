@@ -43,8 +43,8 @@ urlpatterns = [
     path('studentbase/', views.student_base, name = 'student_base'),
     path('teacherbase/', views.teacher_base, name= 'teacher_base'),
     path('teacherbase/edit/<int:id>/', views.teacher_base_edit, name= 'teacher_base_edit'),
-
-        
+    path('studentbase/edit/<int:id>', views.student_base_edit, name = 'student_base_edit'),
+    
     # path(r'^password/$', views.change_password, name='change_password'),
 
 ]

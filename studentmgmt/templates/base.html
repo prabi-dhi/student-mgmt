@@ -6,6 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>Student Management</title>
+    <style>
+    table,th,td {
+      border: 1px solid;
+      {% comment %} padding: 5px; {% endcomment %}
+    }
+    th, td {
+  width:100px;
+  padding:5px;
+      text-align: left;
+    }
+    table{
+      margin-top: 150px;
+    }
+  </style>
   </head>
 
   <body>
@@ -15,7 +29,7 @@
     <a href="{% url 'register_page' %}"><button>Register New User</button></a>
     
     </nav> 
-    <div >
+    <div>
      <div>
     {%block teacher%}{%if show_button%}
      <a href="/teacher">
