@@ -4,4 +4,4 @@ from .models import Marks
 class MarksForm(forms.ModelForm):
     class Meta:
         model = Marks
-        fields = ['student', 'subject','studentgrade']
+        fields = ['subject','studentgrade']

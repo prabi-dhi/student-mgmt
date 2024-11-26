@@ -27,6 +27,12 @@
         <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
       </nav>
       <div>
+        {% block teacher_grade%}
+        <a href="/teacher_grade">
+          <button>Students in physics</button> </a
+        >
+        {%endblock%}
+        
       {%if teachers%}
       {% for teacher in teachers%}
       <table>
@@ -51,11 +57,20 @@
 
     
    {%if form%}   
-  <form method="POST" action="{% url 'teacher_base_edit' instance.id %}" enctype ="multipart/form-data">
+  {% comment %} <form method="POST" action="{% url 'teacher_base_edit' instance.id %}" enctype ="multipart/form-data">
     {%csrf_token%}
         {{form}}
         <button type = "submit">Update</button>
-      </form> 
+      </form>  {% endcomment %}
+
+      {% comment %} <h1>Update</h1>
+      <div>
+        <form method="POST" action="{% url 'teacher_base_edit' instance.id%} ">
+          {% csrf_token %} {{ form.as_p}}
+          <button type="submit">Submit</button>
+        </form>
+      </div> {% endcomment %}
+
 {%else%}
 
 <div>
@@ -66,7 +81,7 @@
         <th>Overall Grade</th>
         <th>Enrolled Class</th>
        <th>Image</th>
-       {% comment %} <th> Grade</th> {% endcomment %}
+       {% comment %} <th> Grade in your subject</th> {% endcomment %}
        <th>Update Student</th>
       </tr>
     </thead>
@@ -83,13 +98,27 @@
             {% else %}
               <p>No img</p>
             {% endif %}</td>
+           {% comment %} <td> 
+            {% for mark in marks %}
+            {% if mark.student == student %}
+              {{ mark.studentgrade }}
+            {% endif %}
+          {% endfor %}
+           </td> {% endcomment %}
+            {% comment %} <td><a href ="{% url 'teacher_base_edit' student.id %}"> Edit </a></td> {% endcomment %}
 
-            <td><a href ="{% url 'teacher_base_edit' student.id %}"> Edit </a></td>
+            {% comment %} <td> <form method="POST" action="{% url 'teacher_base_edit' student.id%} ">
+              {% csrf_token %}
+              <input type="text" name="grade" placeholder="grade" required>
+              <button type="submit">Update</button>
+            </form></td> {% endcomment %}
         </tr>
       {%endfor%}
     </tbody>
   </table>
 </div>
+
+
 {%endif%}
   </body>
   </html>

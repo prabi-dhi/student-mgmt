@@ -127,6 +127,8 @@ def student_edit(request, id):
 @user_passes_test(is_admin, login_url='/')
 def teacher_view(request):   
     teachers = Teacher.objects.filter(is_deleted = False)
+    # subjects = Subject.objects.filter(teacher_name__in = teachers)
+
     form = TeacherForm()
     if request.method == 'POST':
         form = TeacherForm(request.POST, request.FILES)
@@ -235,23 +237,34 @@ def classroom_delete(request, id):
     classroom.save()
     return redirect('/classroom/')
 
-
-######## Marks
-
 @user_passes_test(is_admin, login_url='/')
 def marks_view(request):   
-    marks = Marks.objects.filter(is_deleted = False)
-    form = MarksForm()
-    if request.method == 'POST':
-        form = MarksForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/marks/')
-        else:
-            print(form.errors)
-    context= {'form': form,
-              'marks': marks}
+    subjects = Subject.objects.filter(is_deleted = False)
+          
+    context= {
+              'subjects':subjects,
+              }
     return render(request, 'marks.html',context)
+
+def marks_view_subject(request, subject_id):  
+    subject = Subject.objects.get(id=subject_id)
+    marks = Marks.objects.filter(is_deleted=False, subject=subject)   
+    # form = MarksForm()
+    # if request.method == 'POST':
+    #     form = MarksForm(request.POST)
+    #     if form.is_valid():
+    #         marks = form.save(commit = False)
+    #         marks.subject = subject
+    #         marks.save()
+    #         return redirect('/marks/')
+    #     else:
+    #         print(form.errors)
+    context = {
+        'marks': marks,
+        'subject': subject,
+        # 'form': form,
+    }
+    return render(request, 'marks.html', context)
 
 @user_passes_test(is_student, login_url='/')
 def student_base(request):
@@ -293,7 +306,7 @@ def teacher_base(request):
     teacher_classes = [teacher.class_assigned for teacher in teachers]
     students = Student.objects.filter(is_deleted = False,class_enrolled__in=teacher_classes)
 
-    marks = Marks.objects.filter(student__in=students, subject__in=subjects)
+    marks = Marks.objects.filter(student__in=students, subject__in=subjects) #to show marks in subject that teacher teaches
 
     context={'students':students,
              'teachers':teachers,
@@ -303,17 +316,36 @@ def teacher_base(request):
     return render(request, 'teacherbase.html', context)
 
 @user_passes_test(is_teacher, login_url ='/')
-def teacher_base_edit(request, id):
-    instance = Student.objects.get(id = id, is_deleted = False)
-    form = StudentForm(instance=instance)
-    if request.method == 'POST':
-        form= StudentForm(request.POST,request.FILES, instance=instance)
-        if form.is_valid():
-            form.save()
-            return redirect('/teacherbase/')
-    context={
-             'form': form,
-             'instance': instance
-    }
-    return render(request, 'teacherbase.html', context)
+# def teacher_base_edit(request, id):
+#     instance = Student.objects.get(id = id, is_deleted = False)
+#     form = StudentForm(instance=instance)
+#     if request.method == 'POST':
+#         form= StudentForm(request.POST,request.FILES, instance=instance)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('/teacherbase/')
+#     context={
+#              'form': form,
+#              'instance': instance
+#     }
+#     return render(request, 'teacherbase.html', context)
+
+def teacher_grade(request):
+    # user = request.user
+    # teachers = Teacher.objects.filter(user=user)
+    # # subject = Subject.objects.filter(teacher_name__in = teachers)
+    # instance= Student.objects.get(id=id, is_deleted= False)
+    # form = MarksForm(instance=instance)
+    # if request.method == 'POST':
+    #     form= MarksForm(request.POST, instance=instance)
+    #     if form.is_valid():
+    #         marks = form.save(commit = False)
+    #         # marks.subject = subject
+    #         marks.save()
+    #         return redirect('/teacherbase/')
+    # context={
+    #          'form': form,
+    #          'instance': instance
+    # }
+    return render(request, 'teacher_grade.html')
 

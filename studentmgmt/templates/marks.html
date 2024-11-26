@@ -1,7 +1,11 @@
-{%extends 'base.html'%} {% block marks%}
+{%extends 'base.html'%} {% block marks%} {%for subject in subjects%}
+<h1>Choose Subject to see grades</h1>
+<a href="{% url 'marks_view_subject' subject.id %}">
+  <button>Check {{subject.sub_name}}</button>
+</a>
+{%endfor%}
 <div>
-  <h1>Marks</h1>
-
+  {%if subject%}
   <table style="margin-top: 0px">
     <thead>
       <tr>
@@ -16,21 +20,19 @@
         <td>{{mark.student}}</td>
         <td>{{mark.subject}}</td>
         <td>{{mark.studentgrade}}</td>
-        {% comment %}
-        <td><a href="/subject/edit/{{subject.id}}"> Edit </a></td>
-        <td><a href="/subject/delete/{{subject.id}}"> Delete </a></td>
-        {% endcomment %}
       </tr>
       {%endfor%}
     </tbody>
   </table>
 
+  {% comment %}
   <h1>ADD NEW</h1>
   <div>
-    <form method="POST" action="{% url 'marks_view' %} ">
+    <form method="POST" action="{% url 'marks_view_subject' subject.id%} ">
       {% csrf_token %} {{ form.as_p}}
       <button type="submit">Submit</button>
     </form>
   </div>
+  {% endcomment %}
 </div>
-{%endblock%}
+{%endif%} {%endblock%}
