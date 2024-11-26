@@ -36,6 +36,15 @@
         </tr>
         <tr><th>Department</th>
         <td>{{teacher.department}}</td></tr>
+        <tr><th>Class Assigned</th>
+        <td>{{teacher.class_assigned}}</td></tr>
+        {%for subject in subjects%}
+          <tr>
+            <th>Subject</th>
+            <td>{{subject.sub_name}}</td>
+          </tr>
+        {%endfor%}
+
       </table>{%endfor%}
       {%endif%}
     </div></br>
@@ -54,9 +63,10 @@
     <thead>
       <tr>
         <th>Student name</th>
-        <th>Grade</th>
+        <th>Overall Grade</th>
         <th>Enrolled Class</th>
        <th>Image</th>
+       {% comment %} <th> Grade</th> {% endcomment %}
        <th>Update Student</th>
       </tr>
     </thead>
@@ -73,6 +83,7 @@
             {% else %}
               <p>No img</p>
             {% endif %}</td>
+
             <td><a href ="{% url 'teacher_base_edit' student.id %}"> Edit </a></td>
         </tr>
       {%endfor%}

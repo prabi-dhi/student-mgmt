@@ -4,54 +4,63 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <title>Student Management</title>
     <style>
-    table,th,td {
-      border: 1px solid;
-      {% comment %} padding: 5px; {% endcomment %}
-    }
-    th, td {
-  width:100px;
-  padding:5px;
-      text-align: left;
-    }
-    table{
-      margin-top: 150px;
-    }
-  </style>
+        table,th,td {
+          border: 1px solid;
+          {% comment %} padding: 5px; {% endcomment %}
+        }
+        th, td {
+      width:100px;
+      padding:5px;
+          text-align: left;
+        }
+        table{
+          margin-top: 150px;
+        }
+    </style>
   </head>
 
   <body>
     <nav>
-    <h1>Welcome "{{user.username}}"</h1>
-    <a href="{% url 'logout' %}"><button>Log Out</button></a>
-    <a href="{% url 'register_page' %}"><button>Register New User</button></a>
-    
-    </nav> 
+      <h1>Welcome "{{user.username}}"</h1>
+      <a href="{% url 'logout' %}"><button>Log Out</button></a>
+      <a href="{% url 'register_page' %}"><button>Register New User</button></a>
+    </nav>
     <div>
-     <div>
-    {%block teacher%}{%if show_button%}
-     <a href="/teacher">
-      <button>Check teachers</button></a></div>
-    </a>{%endif%}{%endblock%}
-  </div><div>
-    {%block student%} {%if show_button%}
-    <a href="/student">
-     <button>Check students</button></a></div>
-   </a>{%endif%}{%endblock%}</div>
-<div>
-    {%block subject%}{%if show_button%}
-   <a href="/subject ">
-    <button>Check subjects</button></a></div>
-  </a>{%endif%}{%endblock%}
-</div><div>
-  {%block classroom%}{%if show_button%}
-  <a href="/classroom ">
-   <button>Check classrooms</button></a></div>
- </a>{%endif%}{%endblock%}
-</div>
-</div>  
-  </body>
+      <div>
+        {%block teacher%}{%if show_button%}
+        <a href="/teacher">
+          <button>Check teachers</button> </a
+        >{%endif%}{%endblock%}
+      </div></br>
+      <div>
+        {%block student%} {%if show_button%}
+        <a href="/student">
+          <button>Check students</button> </a
+        >{%endif%}{%endblock%}
+      </div></br>
+      <div>
+        {%block subject%}{%if show_button%}
+        <a href="/subject ">
+          <button>Check subjects</button> </a
+        >{%endif%}{%endblock%}
+      </div></br>
+      <div>
+        {%block classroom%}{%if show_button%}
+        <a href="/classroom ">
+          <button>Check classrooms</button> </a
+        >{%endif%}{%endblock%}
+      </div></br>
+      <div>
+        {%block marks%}{%if show_button%}
+        <a href="/marks ">
+          <button>Check Grades</button> </a
+        >{%endif%}{%endblock%}
+      </div></br>
 
+
+    </div>
+  </body>
 </html>

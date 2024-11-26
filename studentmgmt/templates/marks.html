@@ -1,0 +1,36 @@
+{%extends 'base.html'%} {% block marks%}
+<div>
+  <h1>Marks</h1>
+
+  <table style="margin-top: 0px">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Subject</th>
+        <th>Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for mark in marks %}
+      <tr>
+        <td>{{mark.student}}</td>
+        <td>{{mark.subject}}</td>
+        <td>{{mark.studentgrade}}</td>
+        {% comment %}
+        <td><a href="/subject/edit/{{subject.id}}"> Edit </a></td>
+        <td><a href="/subject/delete/{{subject.id}}"> Delete </a></td>
+        {% endcomment %}
+      </tr>
+      {%endfor%}
+    </tbody>
+  </table>
+
+  <h1>ADD NEW</h1>
+  <div>
+    <form method="POST" action="{% url 'marks_view' %} ">
+      {% csrf_token %} {{ form.as_p}}
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+{%endblock%}

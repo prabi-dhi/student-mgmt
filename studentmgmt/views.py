@@ -5,6 +5,8 @@ from student.models import Student
 from subject.models import Subject
 from classroom.models import Classroom
 from user.models import User
+from marks.models import Marks
+from marks.forms import MarksForm
 from user.forms import UserForm
 from teacher.forms import TeacherForm
 from student.forms import StudentForm
@@ -233,6 +235,24 @@ def classroom_delete(request, id):
     classroom.save()
     return redirect('/classroom/')
 
+
+######## Marks
+
+@user_passes_test(is_admin, login_url='/')
+def marks_view(request):   
+    marks = Marks.objects.filter(is_deleted = False)
+    form = MarksForm()
+    if request.method == 'POST':
+        form = MarksForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/marks/')
+        else:
+            print(form.errors)
+    context= {'form': form,
+              'marks': marks}
+    return render(request, 'marks.html',context)
+
 @user_passes_test(is_student, login_url='/')
 def student_base(request):
     user = request.user
@@ -244,13 +264,8 @@ def student_base(request):
         'teachers':teachers}
     return render(request,'studentbase.html',context)
 
- ####   for email
 def student_base_edit(request,id):
     user= request.user
-    # if user.id != id:
-    #     messages.error(request, "You do not have permission to edit this user's email.")
-    #     return redirect('/studentbase/')
-
     if request.method=='POST':
         new_email = request.POST.get('email')         
         if new_email == user.email:
@@ -274,10 +289,16 @@ def student_base_edit(request,id):
 def teacher_base(request):
     user = request.user
     teachers = Teacher.objects.filter(user=user)
+    subjects = Subject.objects.filter(teacher_name__in = teachers)
     teacher_classes = [teacher.class_assigned for teacher in teachers]
     students = Student.objects.filter(is_deleted = False,class_enrolled__in=teacher_classes)
+
+    marks = Marks.objects.filter(student__in=students, subject__in=subjects)
+
     context={'students':students,
              'teachers':teachers,
+             'subjects':subjects,
+             'marks':marks,
     }
     return render(request, 'teacherbase.html', context)
 

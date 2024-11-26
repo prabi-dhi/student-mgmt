@@ -40,11 +40,12 @@ urlpatterns = [
     path('classroom/', views.classroom_view, name = 'classroom_view'),
     path('classroom/edit/<int:id>/', views.classroom_edit, name='classroom_edit'),
     path('classroom/delete/<int:id>/', views.classroom_delete, name = 'classroom_delete'),
+    path('marks/', views.marks_view, name='marks_view'),
+
     path('studentbase/', views.student_base, name = 'student_base'),
     path('teacherbase/', views.teacher_base, name= 'teacher_base'),
     path('teacherbase/edit/<int:id>/', views.teacher_base_edit, name= 'teacher_base_edit'),
     path('studentbase/edit/<int:id>', views.student_base_edit, name = 'student_base_edit'),
-    
     # path(r'^password/$', views.change_password, name='change_password'),
 
 ]
