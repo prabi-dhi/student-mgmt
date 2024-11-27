@@ -11,7 +11,6 @@ class Student(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, null= True, blank =True)
     image = models.ImageField(upload_to='images/students',null=True, blank = True)
     subjects = models.ManyToManyField(Subject)
-
     class Meta:
         db_table = 'STUDENT'
     def __str__(self):

@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Management</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <h2>Student Marksheet{{student.s_name}}</h2>
+
+    <div>
+      <table>
+        <tr>
+          <th>Subject</th>
+          {%for subject in subject%}
+          <td>{{subject.sub_name}}</td>
+          {%endfor%}
+        </tr>
+        <tr>
+          <th>Grades</th>
+          <td></td>
+          {% comment %} {%for subject in subjects%}
+          <td>
+            {% if subject.name in student_grades %} {{
+            subject_grades[subject.sub_name] }} {% else %} No marks {%endif%}
+          </td>
+          {%endfor%} {% endcomment %}
+        </tr>
+      </table>
+      {% comment %}
+      <table>
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Marks</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%for subject in subject%}
+          <tr>
+            <td>{{subject.sub_name}}</td>
+            {%for mark in marks%}
+            <td>{{ marks.studentgrade}}</td>
+            {%endfor%}
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+      {% endcomment %}
+    </div>
+  </body>
+</html>

@@ -12,6 +12,7 @@
       table, th, td {
       margin-left:auto;
       margin-right:auto;
+      margin-bottom:20px;
       border: 1px solid black;
       border-collapse: collapse;
     }
@@ -19,6 +20,7 @@
       padding: 5px;
       text-align: left;
     }
+
     </style>
   </head>
     <body>
@@ -26,99 +28,75 @@
         <h1>Welcome "{{user.username}}"</h1>
         <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
       </nav>
+      <div class="messages">
+        {%if messages%}
+          {%for message in messages%}
+          {{message}}
+          {%endfor%}
+        {%endif%}
+      </div>
       <div>
         {% block teacher_grade%}
-        <a href="/teacher_grade">
-          <button>Students in physics</button> </a
-        >
+          {%for subject in subjects%}
+            <a href="{% url 'teacher_grade' subject.id %}">
+              <button>Students in {{subject.sub_name}}</button> </a>
+          {%endfor%}
         {%endblock%}
-        
-      {%if teachers%}
-      {% for teacher in teachers%}
-      <table>
-        <tr>
-          <th>Your name</th>
-          <td>{{teacher.name}}</td>
-        </tr>
-        <tr><th>Department</th>
-        <td>{{teacher.department}}</td></tr>
-        <tr><th>Class Assigned</th>
-        <td>{{teacher.class_assigned}}</td></tr>
-        {%for subject in subjects%}
-          <tr>
-            <th>Subject</th>
-            <td>{{subject.sub_name}}</td>
-          </tr>
-        {%endfor%}
-
-      </table>{%endfor%}
-      {%endif%}
-    </div></br>
-
-    
-   {%if form%}   
-  {% comment %} <form method="POST" action="{% url 'teacher_base_edit' instance.id %}" enctype ="multipart/form-data">
-    {%csrf_token%}
-        {{form}}
-        <button type = "submit">Update</button>
-      </form>  {% endcomment %}
-
-      {% comment %} <h1>Update</h1>
+      </div>
       <div>
-        <form method="POST" action="{% url 'teacher_base_edit' instance.id%} ">
-          {% csrf_token %} {{ form.as_p}}
-          <button type="submit">Submit</button>
-        </form>
-      </div> {% endcomment %}
+        {%if teachers%}
+          {% for teacher in teachers%}
+            <table>
+              <tr>
+                <th>Your name</th>
+                <td>{{teacher.name}}</td>
+              </tr>
+              <tr><th>Department</th>
+              <td>{{teacher.department}}</td></tr>
+              <tr><th>Class Assigned</th>
+              <td>{{teacher.class_assigned}}</td></tr>
+              {%for subject in subjects%}
+                <tr>
+                  <th>Subject</th>
+                  <td>{{subject.sub_name}}</td>
+                </tr>
+              {%endfor%}
+      </div>
+             
+            </table>
+          {%endfor%}
+        
+      <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Student name</th>
+                <th>Overall Grade</th>
+                <th>Enrolled Class</th>
+              <th>Image</th>
+              <th>View Student</th>
+              </tr>
+            </thead>
+            <tbody>
+            </div>        
+              {%for student in students%}
+                <tr>
+                  <td>{{student.s_name}}</td> 
+                  <td>{{student.grade}}</td>
+                  <td>{{student.class_enrolled.room_number}}</td>
+                  <td> 
+                    {% if student.image %}
+                      <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50">
+                    {% else %}
+                      <p>No img</p>
+                    {% endif %}</td>
+                  <td><a href = "{% url 'student_marksheet' student.id%}">View</a></td>
+                </tr>
+              {%endfor%}
+              </tbody>
+            </table>
+      </div>
+    {%endif%}
 
-{%else%}
-
-<div>
-  <table>
-    <thead>
-      <tr>
-        <th>Student name</th>
-        <th>Overall Grade</th>
-        <th>Enrolled Class</th>
-       <th>Image</th>
-       {% comment %} <th> Grade in your subject</th> {% endcomment %}
-       <th>Update Student</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      {%for student in students%}
-        <tr>
-          <td>{{student.s_name}}</td> 
-          <td>{{student.grade}}</td>
-          <td>{{student.class_enrolled.room_number}}</td>
-          <td> 
-            {% if student.image %}
-              <img src="{{ student.image.url }}" alt="Student Image" width="50" height="50">
-            {% else %}
-              <p>No img</p>
-            {% endif %}</td>
-           {% comment %} <td> 
-            {% for mark in marks %}
-            {% if mark.student == student %}
-              {{ mark.studentgrade }}
-            {% endif %}
-          {% endfor %}
-           </td> {% endcomment %}
-            {% comment %} <td><a href ="{% url 'teacher_base_edit' student.id %}"> Edit </a></td> {% endcomment %}
-
-            {% comment %} <td> <form method="POST" action="{% url 'teacher_base_edit' student.id%} ">
-              {% csrf_token %}
-              <input type="text" name="grade" placeholder="grade" required>
-              <button type="submit">Update</button>
-            </form></td> {% endcomment %}
-        </tr>
-      {%endfor%}
-    </tbody>
-  </table>
-</div>
-
-
-{%endif%}
-  </body>
+</body>
   </html>

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.http import HttpResponse
 from teacher.models import Teacher
 from student.models import Student
@@ -17,6 +17,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import logout
+# from django.contrib.auth import HttpResponseForbidden
+
 # from django.contrib.auth import update_session_auth_hash
 # from django.contrib.auth.forms import PasswordChangeForm
 
@@ -237,32 +239,22 @@ def classroom_delete(request, id):
     classroom.save()
     return redirect('/classroom/')
 
+## list subjects to see marks
 @user_passes_test(is_admin, login_url='/')
 def marks_view(request):   
-    subjects = Subject.objects.filter(is_deleted = False)
-          
+    subjects = Subject.objects.filter(is_deleted = False)         
     context= {
               'subjects':subjects,
               }
     return render(request, 'marks.html',context)
 
+@user_passes_test(is_admin, login_url='/')
 def marks_view_subject(request, subject_id):  
     subject = Subject.objects.get(id=subject_id)
     marks = Marks.objects.filter(is_deleted=False, subject=subject)   
-    # form = MarksForm()
-    # if request.method == 'POST':
-    #     form = MarksForm(request.POST)
-    #     if form.is_valid():
-    #         marks = form.save(commit = False)
-    #         marks.subject = subject
-    #         marks.save()
-    #         return redirect('/marks/')
-    #     else:
-    #         print(form.errors)
     context = {
         'marks': marks,
         'subject': subject,
-        # 'form': form,
     }
     return render(request, 'marks.html', context)
 
@@ -271,12 +263,12 @@ def student_base(request):
     user = request.user
     students= Student.objects.filter(user = user)
     teachers = Teacher.objects.filter(is_deleted = False, class_assigned__in = [student.class_enrolled for student in students])
-
     context={
         'students':students,
         'teachers':teachers}
     return render(request,'studentbase.html',context)
 
+#update student's email
 def student_base_edit(request,id):
     user= request.user
     if request.method=='POST':
@@ -305,47 +297,66 @@ def teacher_base(request):
     subjects = Subject.objects.filter(teacher_name__in = teachers)
     teacher_classes = [teacher.class_assigned for teacher in teachers]
     students = Student.objects.filter(is_deleted = False,class_enrolled__in=teacher_classes)
-
-    marks = Marks.objects.filter(student__in=students, subject__in=subjects) #to show marks in subject that teacher teaches
-
     context={'students':students,
              'teachers':teachers,
              'subjects':subjects,
-             'marks':marks,
     }
     return render(request, 'teacherbase.html', context)
-
+# add students grade
 @user_passes_test(is_teacher, login_url ='/')
-# def teacher_base_edit(request, id):
-#     instance = Student.objects.get(id = id, is_deleted = False)
-#     form = StudentForm(instance=instance)
-#     if request.method == 'POST':
-#         form= StudentForm(request.POST,request.FILES, instance=instance)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('/teacherbase/')
-#     context={
-#              'form': form,
-#              'instance': instance
-#     }
-#     return render(request, 'teacherbase.html', context)
+def teacher_grade(request,id):
+    subject = Subject.objects.get(id=id)
+    marks = Marks.objects.filter(is_deleted=False, subject=subject)
 
-def teacher_grade(request):
-    # user = request.user
-    # teachers = Teacher.objects.filter(user=user)
-    # # subject = Subject.objects.filter(teacher_name__in = teachers)
-    # instance= Student.objects.get(id=id, is_deleted= False)
-    # form = MarksForm(instance=instance)
-    # if request.method == 'POST':
-    #     form= MarksForm(request.POST, instance=instance)
-    #     if form.is_valid():
-    #         marks = form.save(commit = False)
-    #         # marks.subject = subject
-    #         marks.save()
-    #         return redirect('/teacherbase/')
-    # context={
-    #          'form': form,
-    #          'instance': instance
-    # }
-    return render(request, 'teacher_grade.html')
+    form = MarksForm()
+    if request.method == 'POST':
+        form = MarksForm(request.POST)
+        if form.is_valid():
+            marks = form.save(commit = False)
+            marks.subject = subject
+            marks.save()
+            messages.success(request, "Student's grade was added successfully.")
+            return redirect('/teacherbase/')
+        else:
+            print(form.errors)
+    context={
+        'marks':marks,
+        'subject':subject,
+        'form':form,
+    }
+    return render(request, 'teacher_grade.html',context)
+## edit students grade
+@user_passes_test(is_teacher, login_url ='/')
+def teacher_grade_edit(request,id):
+    try:
+        marks = Marks.objects.get(id=id)
+        if request.method == 'POST':
+            new_grade = request.POST.get('studentgrade')      
+            if new_grade:
+                marks.studentgrade = new_grade
+                marks.save()
+                messages.success(request, "Grade updated successfully.")
+                return redirect('/teacher_grade/')
+            else:
+                messages.error(request,"Grade is empty")
+                return redirect('/teacherbase/')      
+    except Exception as e:
+            messages.error(request, "cant change grade")
+            return redirect('/teacherbase/') 
+    context={
+             'marks':[marks],}  
+    return render(request, 'teacher_grade.html',context)
+
+def student_marksheet(request, id):
+    student=Student.objects.get(id = id)
+    marks = Marks.objects.filter(student = student, is_deleted = False)
+    subject = Subject.objects.all()
+    # subject_grades = {mark.subject.sub_name: mark.studentgrade for mark in marks}
+
+    context={
+        'marks':marks,
+        'subject': subject,
+        # 'subject_grades':subject_grades,
+    }
+    return render(request,'student_marksheet.html', context)
 
