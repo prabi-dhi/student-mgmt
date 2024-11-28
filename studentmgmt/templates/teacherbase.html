@@ -10,6 +10,7 @@
     <title>Student Management</title>
     <style>
       table, th, td {
+
       margin-left:auto;
       margin-right:auto;
       margin-bottom:20px;
@@ -35,14 +36,7 @@
           {%endfor%}
         {%endif%}
       </div>
-      <div>
-        {% block teacher_grade%}
-          {%for subject in subjects%}
-            <a href="{% url 'teacher_grade' subject.id %}">
-              <button>Students in {{subject.sub_name}}</button> </a>
-          {%endfor%}
-        {%endblock%}
-      </div>
+
       <div>
         {%if teachers%}
           {% for teacher in teachers%}
@@ -97,6 +91,15 @@
             </table>
       </div>
     {%endif%}
+
+    <div>
+      {% block teacher_grade%}
+        {%for subject in subjects%}
+          <a href="{% url 'teacher_grade' subject.id %}">
+            <button>Students in {{subject.sub_name}}</button> </a>
+        {%endfor%}
+      {%endblock%}
+    </div>
 
 </body>
   </html>

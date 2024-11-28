@@ -9,47 +9,23 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   </head>
   <body>
-    <h2>Student Marksheet{{student.s_name}}</h2>
+    <h2>Student Marksheet of "{{student.s_name}}"</h2>
 
-    <div>
-      <table>
+    <table>
+      <thead>
         <tr>
           <th>Subject</th>
-          {%for subject in subject%}
-          <td>{{subject.sub_name}}</td>
-          {%endfor%}
+          <th>Grade</th>
         </tr>
+      </thead>
+      <tbody>
+        {% for data in marks_data %}
         <tr>
-          <th>Grades</th>
-          <td></td>
-          {% comment %} {%for subject in subjects%}
-          <td>
-            {% if subject.name in student_grades %} {{
-            subject_grades[subject.sub_name] }} {% else %} No marks {%endif%}
-          </td>
-          {%endfor%} {% endcomment %}
+          <td>{{ data.subject }}</td>
+          <td>{{ data.marks }}</td>
         </tr>
-      </table>
-      {% comment %}
-      <table>
-        <thead>
-          <tr>
-            <th>Subject</th>
-            <th>Marks</th>
-          </tr>
-        </thead>
-        <tbody>
-          {%for subject in subject%}
-          <tr>
-            <td>{{subject.sub_name}}</td>
-            {%for mark in marks%}
-            <td>{{ marks.studentgrade}}</td>
-            {%endfor%}
-          </tr>
-          {%endfor%}
-        </tbody>
-      </table>
-      {% endcomment %}
-    </div>
+        {% endfor %}
+      </tbody>
+    </table>
   </body>
 </html>
