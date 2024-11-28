@@ -52,6 +52,8 @@
         <tr>
           <th>Email</th>
           <td>{{user.email}}</td>
+        </tr><tr><th>Marksheet</th>
+        <td><a href = "{% url 'student_marksheet' student.id%}">View</a></td>
         </tr>
         </table></br>
 

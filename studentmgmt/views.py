@@ -347,20 +347,6 @@ def teacher_grade_edit(request,id):
              'marks':[marks],}  
     return render(request, 'teacher_grade.html',context)
 
-# def student_marksheet(request, id):
-#     student=Student.objects.get(id = id)
-#     marks = Marks.objects.filter(student = student, is_deleted = False)
-#     subject = Subject.objects.all()
-#     subject_grades = {mark.subject.sub_name: mark.studentgrade for mark in marks}
-#     context={
-#         'student':student,
-#         'marks':marks,
-#         'subject': subject,
-#         'subject_grades':subject_grades,
-#     }
-#     print(subject_grades)
-#     return render(request,'student_marksheet.html', context)
-
 def student_marksheet(request, id):
     student = Student.objects.get(id=id)   
     marks_records = Marks.objects.filter(student=student, is_deleted=False)
