@@ -28,6 +28,8 @@
       <nav>
         <h1>Welcome "{{user.username}}"</h1>
         <a href="{% url 'logout' %}"><button>Log Out</button></a></div></br></br>
+        <a href="{% url 'change_password' %}"><button >Change password</button></a>
+
       </nav>
       <div class="messages">
         {%if messages%}

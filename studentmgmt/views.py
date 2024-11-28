@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,get_object_or_404
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from teacher.models import Teacher
 from student.models import Student
 from subject.models import Subject
@@ -16,11 +16,12 @@ from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 # from django.contrib.auth import HttpResponseForbidden
-
-# from django.contrib.auth import update_session_auth_hash
-# from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+# from django.contrib.auth.views import PasswordChangeView
 
 def is_admin(user):
     return user.user_type == 'ADMINISTRATION'
@@ -28,6 +29,22 @@ def is_student(user):
     return user.user_type == 'STUDENT'
 def is_teacher(user):
     return user.user_type == 'TEACHER'
+
+@login_required(login_url='/')
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request,user)
+            # messages.success(request, "password changed successfully")
+            return redirect('/')
+        # else:
+        #     messages.error(request, "Unsuccessfull")
+    else:
+        form = PasswordChangeForm(request.user)
+    context={'form': form}
+    return render(request, 'password.html', context)
 
 @user_passes_test(is_admin, login_url='/')
 def register_page(request):
@@ -361,3 +378,5 @@ def student_marksheet(request, id):
         'marks_data': marks_data
     }  
     return render(request, 'student_marksheet.html', context)
+
+# def generate_pdf

@@ -1,10 +1,10 @@
 from django.contrib import admin
-from django.urls import path
+# from django.urls import path, re_path
+from django.urls import path, re_path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from .import views
-
+# from .import views
 urlpatterns = [
     path('admin/', admin.site.urls),  
     path('', views.login_page, name = 'login_page'),
@@ -25,14 +25,17 @@ urlpatterns = [
     path('classroom/delete/<int:id>/', views.classroom_delete, name = 'classroom_delete'),
     path('marks/', views.marks_view, name='marks_view'),
     path('marks/subject/<int:subject_id>/', views.marks_view_subject, name='marks_view_subject'),
-
     path('studentbase/', views.student_base, name = 'student_base'),
     path('teacherbase/', views.teacher_base, name= 'teacher_base'),
     path('teacher_grade/<int:id>/', views.teacher_grade, name = 'teacher_grade'),
     path('teacher_grade_edit/<int:id>/', views.teacher_grade_edit, name='teacher_grade_edit'),
     path('studentbase/edit/<int:id>/', views.student_base_edit, name = 'student_base_edit'),
-    # path(r'^password/$', views.change_password, name='change_password'),
     path('student_marksheet/<int:id>', views.student_marksheet, name = 'student_marksheet'),
+    path ('password/', views.change_password, name='change_password'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# urlpatterns = [
+#     re_path (r'^password/$', views.change_password, name='change_password'),
+# ]
